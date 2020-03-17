@@ -30,16 +30,16 @@ const fs=require('fs');
   puppeteer.launch({headless:true,executablePath:'/usr/bin/google-chrome',
 }).then((browser)=>{
     browser.newPage().then((page)=>{
-      console.log('URL starting at 0 secs');
+      // console.log('URL starting at 0 secs');
       const beginBeforeURL=Date.now();
       page.goto(url,{waitUntil: 'networkidle0'}).then(async(result)=>{
         const beginAfterURL=Date.now();
-      console.log('URL loaded at ',(Date.now()-beginBeforeURL)/1000+'secs');
+      // console.log('URL loaded at ',(Date.now()-beginBeforeURL)/1000+'secs');
         await page.waitForSelector('.react-grid-layout').then(async(el)=>{
           switch (design.template) {
             case 'No Template':
               if(design.layout==='Dashboard Layout'){
-                console.log('evaluation started at ',(Date.now()-beginBeforeURL)/1000+'secs');
+                // console.log('evaluation started at ',(Date.now()-beginBeforeURL)/1000+'secs');
                   await page.$eval('.react-grid-layout', el => {
                     const newParent = document.getElementById('kibana-body');
                     newParent.appendChild(el);
@@ -54,11 +54,11 @@ const fs=require('fs');
                   });
                   width=dashboardWidth;
                   height=dashboardHeight;
-                  console.log('evaluation completed at ',(Date.now()-beginBeforeURL)/1000+'secs');
+                  // console.log('evaluation completed at ',(Date.now()-beginBeforeURL)/1000+'secs');
                   time=7000;
               }
               else{//smart layout
-                console.log('evaluation started at ',(Date.now()-beginBeforeURL)/1000+'secs');
+                // console.log('evaluation started at ',(Date.now()-beginBeforeURL)/1000+'secs');
                 await page.$eval('.react-grid-layout', el => {
                   const newParent = document.getElementById('kibana-body');
                   newParent.appendChild(el);
@@ -79,7 +79,6 @@ const fs=require('fs');
                   smartWidth=595;
                   smartHeight=842;
                   let length=await page.$('.react-grid-item', el => (el.length));
-                  console.log('222',length);
                   styleHeight='354px';
                   styleWidth='595px';
                 }
@@ -102,7 +101,7 @@ const fs=require('fs');
                 else{//landscape
                   await page.addStyleTag({content:`.react-grid-item{position:static !important;height:${styleHeight} !important;width:${styleWidth} !important;`});
                 }
-                console.log('evaluation completed at ',(Date.now()-beginBeforeURL)/1000+'secs');
+                // console.log('evaluation completed at ',(Date.now()-beginBeforeURL)/1000+'secs');
                 time=5000;
               }
               break;
@@ -112,7 +111,7 @@ const fs=require('fs');
           }
         setTimeout(async() => {
           const endTime=new Date();
-          console.log('pdf rendering started at ',(Date.now()-beginBeforeURL)/1000+'secs');
+          // console.log('pdf rendering started at ',(Date.now()-beginBeforeURL)/1000+'secs');
           page.pdf({path: path,
             width: width,
             height: height,
@@ -205,8 +204,8 @@ i{ font - style: italic!important; } span, div{ display: block; white - space: n
             if(sendMail===true){
               let mailObj=new MailService(path);
               mailObj.sendMail().then((result)=>{
-                console.log('Time taken for pdf generation and sending mail from before loading url',(Date.now()-beginBeforeURL)/1000+"secs");
-                console.log('Mail sent successfully:',result.response);
+                // console.log('Time taken for pdf generation and sending mail from before loading url',(Date.now()-beginBeforeURL)/1000+"secs");
+                // console.log('Mail sent successfully:',result.response);
                 resolve('PDF generated successfully + Mail sent successfully');
               }).catch((error)=>{
                 // console.log('Error in sending mail:',error);
@@ -216,8 +215,8 @@ i{ font - style: italic!important; } span, div{ display: block; white - space: n
             else{
               // console.log('No mail sent:sendMail is false');
               const endTime=Date.now();
-              console.log('PDF rendering completed at ',(endTime-beginBeforeURL)/1000+'secs');
-              console.log('Time taken for pdf generation alone',(endTime-beginAfterURL)/1000+"secs");
+              // console.log('PDF rendering completed at ',(endTime-beginBeforeURL)/1000+'secs');
+              // console.log('Time taken for pdf generation alone',(endTime-beginAfterURL)/1000+"secs");
               resolve('PDF generated Successfully without mail');
             }
             // browser.close();

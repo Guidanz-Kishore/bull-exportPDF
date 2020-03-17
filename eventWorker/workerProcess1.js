@@ -10,10 +10,10 @@ module.exports=processQueue=(job)=>new Promise((resolve,reject)=>{
   console.log(`${job.data.fileName} is going to sleep with pid `+process.pid);
   setTimeout(() => {
     const vizObj=new classesMapping[job.data.vizSource]();
-    if (!fs.existsSync('.'+job.data.downloadPath)) {
-      fs.mkdirSync('.'+job.data.downloadPath);
+    if (!fs.existsSync('.'+job.data.downloadPath+'s')) {
+      fs.mkdirSync('.'+job.data.downloadPath+'s');
      }
-     let path=process.cwd()+job.data.downloadPath+'/'+job.data.fileName+'.'+job.data.downloadType;
+     let path=process.cwd()+job.data.downloadPath+'s'+'/'+job.data.fileName+'.'+job.data.downloadType;
     vizObj.executePuppeteer(job.data.url,path,job.data.downloadType,job.data.sendMail,job.data.design,job.data.fileName).then((result)=>{
       console.log('Completed:',result);
       resolve('Completed:'+result);
