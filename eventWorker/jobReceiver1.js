@@ -1,3 +1,4 @@
 const Queue=require('bull');
 const receiverQueue=new Queue('apiqueue');
-receiverQueue.process(3,'/home/guidanz-kishore/Documents/skedler-new_Kish-new/eventWorker/workerProcess1')
+let path=process.cwd()+'/'+'workerProcess1';
+receiverQueue.process(3,path);
