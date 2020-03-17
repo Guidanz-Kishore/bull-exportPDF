@@ -1,6 +1,6 @@
-var {Kibana}=require('../vizSource/kibana/index')
-var {Grafana}=require('../vizSource/grafana/index')
-var proces=require('process');
+const {Kibana}=require('../vizSource/kibana/index')
+const {Grafana}=require('../vizSource/grafana/index')
+const homeDir=require('../util');
 const fs=require('fs');
 const classesMapping={
   'grafana':Grafana,
@@ -8,12 +8,16 @@ const classesMapping={
 }
 module.exports=processQueue=(job)=>new Promise((resolve,reject)=>{
   console.log(`${job.data.fileName} is going to sleep with pid `+process.pid);
-  setTimeout(() => {
+    let folderPath='/reportSamples';
     const vizObj=new classesMapping[job.data.vizSource]();
-    if (!fs.existsSync('.'+job.data.downloadPath+'s')) {
-      fs.mkdirSync('.'+job.data.downloadPath+'s');
+    if (!fs.existsSync(homeDir.homeDir+'/.'+folderPath)) {
+      fs.mkdirSync(homeDir.homeDir+'/.'+folderPath);
      }
-     let path=process.cwd()+job.data.downloadPath+'s'+'/'+job.data.fileName+'.'+job.data.downloadType;
+     folderPath=homeDir.homeDir+folderPath;
+    if (!fs.existsSync(folderPath+'/.'+job.data.downloadPath+'s')) {
+      fs.mkdirSync(folderPath+'/.'+job.data.downloadPath+'s');
+     }
+     let path=`${folderPath}/${job.data.downloadPath}s/${job.data.fileName}.${job.data.downloadType}`;
     vizObj.executePuppeteer(job.data.url,path,job.data.downloadType,job.data.sendMail,job.data.design,job.data.fileName).then((result)=>{
       console.log('Completed:',result);
       resolve('Completed:'+result);
@@ -21,7 +25,6 @@ module.exports=processQueue=(job)=>new Promise((resolve,reject)=>{
       console.log('Failed:'+error);
       reject('Failed'+error);
     });
-  }, 10000);
 });
 
 // module.exports=processQueue=(job)=>{
