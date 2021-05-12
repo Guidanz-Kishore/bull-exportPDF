@@ -9,7 +9,7 @@
     "elasticsearch": "^16.6.0",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
-    "nodemailer": "^6.4.2",
+    "nodemailer": "^6.4.16",
     "path": "^0.12.7",
     "puppeteer": "^2.1.1",
     "puppeteer-core": "^2.1.1",
